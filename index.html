@@ -10,9 +10,16 @@
   <div class="flex-col space-y-2 justify-center items-center">
     <button id='loginButton' onclick="" class="mx-auto rounded-md p-2 bg-purple-500 text-white">
       MetaMask로 로그인하세요.
+
+      <button id='sendEtherButton' class="mx-auto rounded-md p-2 bg-green-500 text-white" onclick="sendEther()">
+        이더리움 보내기
+      </button>
+
     </button>
     <p id='userWallet' class='text-lg text-gray-600 my-2'></p>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.1.1/web3.min.js"></script>
   <script type="text/javascript" src="meta.js"></script>
 </body>
 </html>
+
