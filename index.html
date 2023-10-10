@@ -1,25 +1,68 @@
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Web3 Metamask Login</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <title>Web3 Metamask Login</title>
-  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-</head>
-
-<body class="flex w-screen h-screen justify-center items-center">
-  <div class="flex-col space-y-2 justify-center items-center">
-    <button id='loginButton' onclick="" class="mx-auto rounded-md p-2 bg-purple-500 text-white">
-      MetaMask로 로그인하세요.
-
-      <button id='sendEtherButton' class="mx-auto rounded-md p-2 bg-green-500 text-white" onclick="sendEther()">
+  <body class="flex w-screen h-screen justify-center items-center bg-gray-100">
+    <div class="flex-col space-y-4 justify-center items-center bg-white p-6 rounded-lg shadow-md">
+      <button id='loginButton' class="w-full mx-auto rounded-md p-2 bg-purple-500 text-white">
+        MetaMask로 로그인하세요.
+      </button>
+      <div id='userWallet' class='text-sm text-gray-600 my-2 p-2 border border-gray-300 rounded w-full text-center'></div>
+      <button id='sendEtherButton' class="w-full mx-auto rounded-md p-2 bg-green-500 text-white" onclick="sendEther()">
         이더리움 보내기
       </button>
+      <button id='goToNewPage' class="w-full mx-auto mt-2 rounded-md p-2 bg-blue-500 text-white" onclick="goToNewProtectedPage()">
+        Go to New Protected Page
+      </button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.1.1/web3.min.js"></script>
+    <script type="text/javascript" src="meta.js"></script>
+    <script>
+        function goToProtectedPage() {
+          // 이 부분에서 로그인 상태를 확인
+          if (window.ethereum) {
+              if (window.ethereum.selectedAddress) {
+                  // 이미 주소가 있는 경우
+                  window.location.href = "protected.html";
+              } else {
+                  // 주소가 없는 경우 accountsChanged 이벤트를 사용
+                  window.ethereum.on('accountsChanged', function (accounts) {
+                      if (accounts.length > 0) {
+                          // 연결된 주소가 있을 경우
+                          window.location.href = "protected.html";
+                      } else {
+                          alert("Please log in with MetaMask to access the protected page.");
+                      }
+                  });
 
-    </button>
-    <p id='userWallet' class='text-lg text-gray-600 my-2'></p>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.1.1/web3.min.js"></script>
-  <script type="text/javascript" src="meta.js"></script>
-</body>
+                  // 사용자에게 MetaMask 연결 요청
+                  window.ethereum.request({ method: 'eth_requestAccounts' });
+              }
+          } else {
+              alert("Please install and log in with MetaMask to access the protected page.");
+          }
+        }
+        function goToNewProtectedPage() {
+            if (window.ethereum) {
+                if (window.ethereum.selectedAddress) {
+                    // 로그인된 상태
+                    window.location.href = "newpage.html";
+                } else {
+                    // 로그인 상태가 아닌 경우
+                    alert("Please log in with MetaMask to access the new protected page.");
+                    window.location.href = "index.html";  // 메인 페이지로 리다이렉트
+                }
+            } else {
+                alert("Please install MetaMask to access the new protected page.");
+                window.location.href = "index.html";  // 메인 페이지로 리다이렉트
+            }
+        }
+
+
+    </script>
+  </body>
 </html>
-

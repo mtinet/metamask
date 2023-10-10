@@ -23,7 +23,7 @@ async function loginWithMetaMask() {
 
   window.userWalletAddress = accounts[0]
   userWallet.innerText = window.userWalletAddress
-  loginButton.innerText = 'Sign out of MetaMask'
+  loginButton.innerText = 'MetaMask에서 로그아웃합니다.'
 
   loginButton.removeEventListener('click', loginWithMetaMask)
   setTimeout(() => {
@@ -34,7 +34,7 @@ async function loginWithMetaMask() {
 function signOutOfMetaMask() {
   window.userWalletAddress = null
   userWallet.innerText = ''
-  loginButton.innerText = 'MetaMask에서 '
+  loginButton.innerText = 'MetaMask로 로그인하세요. '
 
   loginButton.removeEventListener('click', signOutOfMetaMask)
   setTimeout(() => {
@@ -42,9 +42,6 @@ function signOutOfMetaMask() {
   }, 200)
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  toggleButton()
-});
 
 const sendEtherButton = document.getElementById('sendEtherButton');
 const recipientAddress = '0x3DD753E07BB016Ea43B572cA8Ec0B81F263A91a9'; // 수신자 지갑 주소를 여기에 입력하세요.
@@ -134,13 +131,29 @@ async function sendEther() {
   checkConfirmation();
 }
 
+function checkMetaMaskLoginStatus() {
+  if (window.ethereum && window.ethereum.selectedAddress) {
+      window.userWalletAddress = window.ethereum.selectedAddress;
+      userWallet.innerText = window.userWalletAddress;
+      loginButton.innerText = 'MetaMask에서 로그아웃합니다.';
+      
+      loginButton.removeEventListener('click', loginWithMetaMask);
+      loginButton.addEventListener('click', signOutOfMetaMask);
+  } else {
+      userWallet.innerText = '';
+      loginButton.innerText = 'MetaMask로 로그인하세요.';
+      
+      loginButton.removeEventListener('click', signOutOfMetaMask);
+      loginButton.addEventListener('click', loginWithMetaMask);
+  }
+}
 
 window.addEventListener('DOMContentLoaded', () => {
   toggleButton();
-  // 다음과 같이 버튼의 활성화 상태를 조절할 수 있습니다.
+  checkMetaMaskLoginStatus();
+
   if (!window.ethereum) {
     sendEtherButton.disabled = true;
   }
 });
-
 
